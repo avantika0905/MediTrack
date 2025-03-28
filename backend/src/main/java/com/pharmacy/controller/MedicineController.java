@@ -1,11 +1,12 @@
 package com.pharmacy.controller;
 
-import com.pharmacy.model.Medicine;
+import com.pharmacy.dto.MedicineDto;
 import com.pharmacy.service.MedicineService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,33 +22,59 @@ public class MedicineController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Medicine>> getAllMedicines() {
-        logger.info("API Call: GET /api/medicines");
+    public ResponseEntity<List<MedicineDto.MedicineResponse>> getAllMedicines() {
+        logger.info("Fetching all medicines");
         return ResponseEntity.ok(medicineService.getAllMedicines());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Medicine> getMedicineById(@PathVariable String id) {
-        logger.info("API Call: GET /api/medicines/{}", id);
+    public ResponseEntity<MedicineDto.MedicineResponse> getMedicineById(@PathVariable String id) {
+        logger.info("Fetching medicine with id: {}", id);
         return ResponseEntity.ok(medicineService.getMedicineById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Medicine> createMedicine(@Valid @RequestBody Medicine medicine) {
-        logger.info("API Call: POST /api/medicines");
-        return ResponseEntity.status(201).body(medicineService.createMedicine(medicine));
+    public ResponseEntity<MedicineDto.MedicineResponse> createMedicine(@RequestBody MedicineDto.MedicineRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+        
+        logger.info("Creating new medicine: {} by user: {}", request.getName(), currentUserEmail);
+        return ResponseEntity.ok(medicineService.createMedicine(request, currentUserEmail));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Medicine> updateMedicine(@PathVariable String id, @Valid @RequestBody Medicine medicine) {
-        logger.info("API Call: PUT /api/medicines/{}", id);
-        return ResponseEntity.ok(medicineService.updateMedicine(id, medicine));
+    public ResponseEntity<MedicineDto.MedicineResponse> updateMedicine(
+            @PathVariable String id,
+            @RequestBody MedicineDto.MedicineRequest request) {
+        logger.info("Updating medicine with id: {}", id);
+        return ResponseEntity.ok(medicineService.updateMedicine(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMedicine(@PathVariable String id) {
-        logger.info("API Call: DELETE /api/medicines/{}", id);
+    public ResponseEntity<Void> deleteMedicine(@PathVariable String id) {
+        logger.info("Deleting medicine with id: {}", id);
         medicineService.deleteMedicine(id);
-        return ResponseEntity.ok("Medicine deleted successfully");
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<MedicineDto.MedicineResponse>> searchMedicines(@RequestParam String query) {
+        logger.info("Searching medicines with query: {}", query);
+        return ResponseEntity.ok(medicineService.searchMedicines(query));
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<MedicineDto.MedicineResponse>> getMedicinesByCategory(@PathVariable String category) {
+        logger.info("Fetching medicines by category: {}", category);
+        return ResponseEntity.ok(medicineService.getMedicinesByCategory(category));
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<MedicineDto.MedicineResponse>> getUserMedicines() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+        
+        logger.info("Fetching medicines created by user: {}", currentUserEmail);
+        return ResponseEntity.ok(medicineService.getMedicinesByUser(currentUserEmail));
     }
 }

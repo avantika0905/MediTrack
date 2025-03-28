@@ -3,6 +3,7 @@ package com.pharmacy.model;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.math.BigDecimal;
 
 @Data
 @Document(collection = "medicines")
@@ -11,9 +12,10 @@ public class Medicine {
     private String id;
     private String name;
     private String brand;
-    private String description;
-    private double price;
+    private BigDecimal price;
     private int stock;
-    private String imageUrl;
+    private String description;
+    private String image;
     private String category;
+    private String createdBy; // User ID who created this medicine
 }
