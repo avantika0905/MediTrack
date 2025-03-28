@@ -1,22 +1,32 @@
-// "use client"
+// // client/components/register-form.tsx
 
-// import { useState } from "react"
-// import { useRouter } from "next/navigation"
-// import { authApi } from "@/lib/api/auth-api"
-// import { Button } from "@/components/ui/button"
-// import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-// import { Input } from "@/components/ui/input"
-// import { toast } from "@/components/ui/use-toast"
-// import { zodResolver } from "@hookform/resolvers/zod"
-// import { useForm } from "react-hook-form"
-// import * as z from "zod"
-// import { useAuth } from "@/lib/context/auth-context"
+// "use client";
+
+// import { useState } from "react";
+// import { useRouter } from "next/navigation";
+// import { authApi } from "@/lib/api/auth-api";
+// import { Button } from "@/components/ui/button";
+// import {
+//   Form,
+//   FormControl,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "@/components/ui/form";
+// import { Input } from "@/components/ui/input";
+// import { toast } from "@/components/ui/use-toast";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { useForm } from "react-hook-form";
+// import * as z from "zod";
+// import { useAuth } from "@/lib/context/auth-context";
 
 // const formSchema = z
 //   .object({
 //     username: z.string().min(3, {
 //       message: "Username must be at least 3 characters.",
 //     }),
+//     email: z.string().email({ message: "Invalid email format." }),
 //     password: z.string().min(6, {
 //       message: "Password must be at least 6 characters.",
 //     }),
@@ -27,64 +37,68 @@
 //   .refine((data) => data.password === data.confirmPassword, {
 //     message: "Passwords do not match",
 //     path: ["confirmPassword"],
-//   })
+//   });
 
 // export default function RegisterForm() {
-//   const router = useRouter()
-//   const { login } = useAuth()
-//   const [isLoading, setIsLoading] = useState(false)
+//   const router = useRouter();
+//   const { login } = useAuth();
+//   const [isLoading, setIsLoading] = useState(false);
 
 //   const form = useForm<z.infer<typeof formSchema>>({
 //     resolver: zodResolver(formSchema),
 //     defaultValues: {
 //       username: "",
+//       email: "",
 //       password: "",
 //       confirmPassword: "",
 //     },
-//   })
+//   });
 
 //   async function onSubmit(values: z.infer<typeof formSchema>) {
-//     setIsLoading(true)
+//     setIsLoading(true);
 
 //     try {
+//       // Register the user with username, email, password and role
 //       const response = await authApi.register({
 //         username: values.username,
+//         email: values.email,
 //         password: values.password,
 //         roles: ["USER"],
-//       })
+//       });
 
-//       // After registration, log the user in
+//       // Login the user using email and password
 //       const loginResponse = await authApi.login({
-//         username: values.username,
+//         email: values.email,
 //         password: values.password,
-//       })
+//       });
 
 //       // Extract token from response
-//       const token = loginResponse.token.replace("Bearer ", "")
+//       const token = loginResponse.token.replace("Bearer ", "");
 
-//       // Set auth state
+//       // Set auth state; note that we now include email from response
 //       login(token, {
 //         id: response.id,
 //         username: response.username,
+//         email: response.email,
 //         roles: response.roles,
-//       })
+//       });
 
 //       toast({
 //         title: "Registration successful",
 //         description: "Your account has been created successfully.",
-//       })
+//       });
 
 //       // Redirect to home page
-//       router.push("/")
+//       router.push("/");
 //     } catch (error) {
-//       console.error("Registration failed:", error)
+//       console.error("Registration failed:", error);
 //       toast({
 //         title: "Registration failed",
 //         description: "Please try again with a different username.",
 //         variant: "destructive",
-//       })
+//       });
 //     } finally {
-//       setIsLoading(false)
+//       setIsLoading(false);
 //     }
 //   }
 
@@ -106,12 +120,29 @@
 //         />
 //         <FormField
 //           control={form.control}
+//           name="email"
+//           render={({ field }) => (
+//             <FormItem>
+//               <FormLabel>Email</FormLabel>
+//               <FormControl>
+//                 <Input type="email" placeholder="Enter your email" {...field} />
+//               </FormControl>
+//               <FormMessage />
+//             </FormItem>
+//           )}
+//         />
+//         <FormField
+//           control={form.control}
 //           name="password"
 //           render={({ field }) => (
 //             <FormItem>
 //               <FormLabel>Password</FormLabel>
 //               <FormControl>
-//                 <Input type="password" placeholder="Enter your password" {...field} />
+//                 <Input
+//                   type="password"
+//                   placeholder="Enter your password"
+//                   {...field}
+//                 />
 //               </FormControl>
 //               <FormMessage />
 //             </FormItem>
@@ -124,7 +155,11 @@
 //             <FormItem>
 //               <FormLabel>Confirm Password</FormLabel>
 //               <FormControl>
-//                 <Input type="password" placeholder="Confirm your password" {...field} />
+//                 <Input
+//                   type="password"
+//                   placeholder="Confirm your password"
+//                   {...field}
+//                 />
 //               </FormControl>
 //               <FormMessage />
 //             </FormItem>
@@ -135,131 +170,8 @@
 //         </Button>
 //       </form>
 //     </Form>
-//   )
+//   );
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// client/components/register-form.tsx
 
 "use client";
 
@@ -287,7 +199,12 @@ const formSchema = z
     username: z.string().min(3, {
       message: "Username must be at least 3 characters.",
     }),
-    email: z.string().email({ message: "Invalid email format." }),
+    email: z.string().email({
+      message: "Please enter a valid email address.",
+    }),
+    fullName: z.string().min(2, {
+      message: "Full name must be at least 2 characters.",
+    }),
     password: z.string().min(6, {
       message: "Password must be at least 6 characters.",
     }),
@@ -310,6 +227,7 @@ export default function RegisterForm() {
     defaultValues: {
       username: "",
       email: "",
+      fullName: "",
       password: "",
       confirmPassword: "",
     },
@@ -319,29 +237,18 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     try {
-      // Register the user with username, email, password and role
       const response = await authApi.register({
         username: values.username,
         email: values.email,
-        password: values.password,
-        roles: ["USER"],
-      });
-
-      // Login the user using email and password
-      const loginResponse = await authApi.login({
-        email: values.email,
+        fullName: values.fullName,
         password: values.password,
       });
 
-      // Extract token from response
-      const token = loginResponse.token.replace("Bearer ", "");
-
-      // Set auth state; note that we now include email from response
-      login(token, {
+      // Set auth state
+      login(response.token, {
         id: response.id,
         username: response.username,
         email: response.email,
-        roles: response.roles,
       });
 
       toast({
@@ -355,7 +262,7 @@ export default function RegisterForm() {
       console.error("Registration failed:", error);
       toast({
         title: "Registration failed",
-        description: "Please try again with a different username.",
+        description: "Please try again with a different username or email.",
         variant: "destructive",
       });
     } finally {
@@ -387,6 +294,19 @@ export default function RegisterForm() {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="Enter your email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="fullName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Full Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your full name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

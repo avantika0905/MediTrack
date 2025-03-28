@@ -1,3 +1,6 @@
+ 
+// // client/components/login-form.tsx
+
 // "use client"
 
 // import { useState } from "react"
@@ -13,9 +16,7 @@
 // import { useAuth } from "@/lib/context/auth-context"
 
 // const formSchema = z.object({
-//   username: z.string().min(3, {
-//     message: "Username must be at least 3 characters.",
-//   }),
+//   email: z.string().email({ message: "Invalid email format." }),
 //   password: z.string().min(6, {
 //     message: "Password must be at least 6 characters.",
 //   }),
@@ -29,7 +30,7 @@
 //   const form = useForm<z.infer<typeof formSchema>>({
 //     resolver: zodResolver(formSchema),
 //     defaultValues: {
-//       username: "",
+//       email: "",
 //       password: "",
 //     },
 //   })
@@ -39,18 +40,19 @@
 
 //     try {
 //       const response = await authApi.login({
-//         username: values.username,
+//         email: values.email,
 //         password: values.password,
 //       })
 
 //       // Extract token from response
 //       const token = response.token.replace("Bearer ", "")
 
-//       // Set auth state
+//       // Set auth state (we now include email in the user object)
 //       login(token, {
-//         id: "user123", // This would normally come from a decoded JWT or a separate API call
-//         username: values.username,
-//         roles: ["USER"], // This would normally come from a decoded JWT or a separate API call
+//         id: "user123", // Replace with real user id from API if available
+//         username: "", // If needed, fetch username separately or from the token
+//         email: values.email,
+//         roles: ["USER"],
 //       })
 
 //       toast({
@@ -77,12 +79,12 @@
 //       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 //         <FormField
 //           control={form.control}
-//           name="username"
+//           name="email"
 //           render={({ field }) => (
 //             <FormItem>
-//               <FormLabel>Username</FormLabel>
+//               <FormLabel>Email</FormLabel>
 //               <FormControl>
-//                 <Input placeholder="Enter your username" {...field} />
+//                 <Input type="email" placeholder="Enter your email" {...field} />
 //               </FormControl>
 //               <FormMessage />
 //             </FormItem>
@@ -207,7 +209,13 @@
 
 
 
-// client/components/login-form.tsx
+
+
+
+
+
+
+
 
 "use client"
 
@@ -224,7 +232,9 @@ import * as z from "zod"
 import { useAuth } from "@/lib/context/auth-context"
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email format." }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
@@ -252,15 +262,11 @@ export default function LoginForm() {
         password: values.password,
       })
 
-      // Extract token from response
-      const token = response.token.replace("Bearer ", "")
-
-      // Set auth state (we now include email in the user object)
-      login(token, {
-        id: "user123", // Replace with real user id from API if available
-        username: "", // If needed, fetch username separately or from the token
-        email: values.email,
-        roles: ["USER"],
+      // Set auth state
+      login(response.token, {
+        id: response.id,
+        username: response.username,
+        email: response.email,
       })
 
       toast({
@@ -318,3 +324,4 @@ export default function LoginForm() {
     </Form>
   )
 }
+

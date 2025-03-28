@@ -11,6 +11,7 @@ import { Trash, MinusCircle, PlusCircle } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { Input } from "@/components/ui/input"
 
 export default function CartItems() {
   const { cart, updateQuantity, removeItem, clearCart } = useCart()
@@ -18,6 +19,8 @@ export default function CartItems() {
   const router = useRouter()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [shippingAddress, setShippingAddress] = useState("")
+  const [paymentMethod, setPaymentMethod] = useState("Credit Card")
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -39,19 +42,30 @@ export default function CartItems() {
       return
     }
 
+    if (!shippingAddress) {
+      toast({
+        title: "Shipping address required",
+        description: "Please enter a shipping address.",
+        variant: "destructive",
+      })
+      return
+    }
+
     setIsCheckingOut(true)
 
     try {
-      // Place an order for each item in the cart
-      for (const item of cart.items) {
-        await ordersApi.create(
-          {
-            medicineId: item.id,
-            quantity: item.quantity,
-          },
-          auth.token!,
-        )
-      }
+      // Create order items from cart
+      const orderItems = cart.items.map((item) => ({
+        medicineId: item.id,
+        quantity: item.quantity,
+      }))
+
+      // Create order
+      await ordersApi.create({
+        items: orderItems,
+        shippingAddress,
+        paymentMethod,
+      })
 
       // Clear the cart
       clearCart()
@@ -143,6 +157,32 @@ export default function CartItems() {
             ))}
           </TableBody>
         </Table>
+
+        <div className="mt-6 space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Shipping Address</label>
+            <Input
+              value={shippingAddress}
+              onChange={(e) => setShippingAddress(e.target.value)}
+              placeholder="Enter your shipping address"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Payment Method</label>
+            <select
+              className="w-full p-2 border rounded-md"
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            >
+              <option value="Credit Card">Credit Card</option>
+              <option value="Debit Card">Debit Card</option>
+              <option value="UPI">UPI</option>
+              <option value="Cash on Delivery">Cash on Delivery</option>
+            </select>
+          </div>
+        </div>
       </CardContent>
       <CardFooter className="flex flex-col sm:flex-row justify-between p-6 border-t">
         <div className="mb-4 sm:mb-0">

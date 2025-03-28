@@ -5,7 +5,8 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 export interface User {
   id: string
   username: string
-  roles: string[]
+  email: string
+  roles?: string[]
 }
 
 export interface AuthState {
