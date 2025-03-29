@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         try {
             String jwt = getJwtFromRequest(request);
 
@@ -58,18 +58,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Optional<Cookie> jwtCookie = Arrays.stream(request.getCookies())
                     .filter(cookie -> "jwt".equals(cookie.getName()))
                     .findFirst();
-            
+
             if (jwtCookie.isPresent()) {
                 return jwtCookie.get().getValue();
             }
         }
-        
+
         // Then try to get from Authorization header
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
-        
+
         return null;
     }
 }
+
+
+
+
+
+
+
+
+
+
+ 
