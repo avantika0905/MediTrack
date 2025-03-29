@@ -201,9 +201,6 @@
 
 
 
-
-
-
 import { toast } from "@/components/ui/use-toast"
 
 const API_BASE_URL = "http://localhost:8080"
@@ -269,15 +266,26 @@ export const paymentApi = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(data),
         credentials: "include", // Include cookies
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        console.error("Failed to create payment order:", errorData)
-        throw new Error(errorData.message || "Failed to create payment order")
+        const errorText = await response.text()
+        let errorMessage = "Failed to create payment order"
+
+        try {
+          const errorData = JSON.parse(errorText)
+          errorMessage = errorData.message || errorMessage
+        } catch (e) {
+          // If parsing fails, use the raw text
+          errorMessage = errorText || errorMessage
+        }
+
+        console.error("Failed to create payment order:", errorMessage)
+        throw new Error(errorMessage)
       }
 
       const responseData = await response.json()
@@ -296,15 +304,26 @@ export const paymentApi = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(data),
         credentials: "include", // Include cookies
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        console.error("Failed to verify payment:", errorData)
-        throw new Error(errorData.message || "Failed to verify payment")
+        const errorText = await response.text()
+        let errorMessage = "Failed to verify payment"
+
+        try {
+          const errorData = JSON.parse(errorText)
+          errorMessage = errorData.message || errorMessage
+        } catch (e) {
+          // If parsing fails, use the raw text
+          errorMessage = errorText || errorMessage
+        }
+
+        console.error("Failed to verify payment:", errorMessage)
+        throw new Error(errorMessage)
       }
 
       const responseData = await response.json()
@@ -320,13 +339,26 @@ export const paymentApi = {
       console.log("Fetching payment details for order:", orderId)
 
       const response = await fetch(`${API_BASE_URL}/api/payments/order/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         credentials: "include", // Include cookies
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        console.error("Failed to fetch payment details:", errorData)
-        throw new Error(errorData.message || "Failed to fetch payment details")
+        const errorText = await response.text()
+        let errorMessage = "Failed to fetch payment details"
+
+        try {
+          const errorData = JSON.parse(errorText)
+          errorMessage = errorData.message || errorMessage
+        } catch (e) {
+          // If parsing fails, use the raw text
+          errorMessage = errorText || errorMessage
+        }
+
+        console.error("Failed to fetch payment details:", errorMessage)
+        throw new Error(errorMessage)
       }
 
       const responseData = await response.json()

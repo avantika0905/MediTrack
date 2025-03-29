@@ -1,6 +1,3 @@
- 
-// // client/components/login-form.tsx
-
 // "use client"
 
 // import { useState } from "react"
@@ -16,7 +13,9 @@
 // import { useAuth } from "@/lib/context/auth-context"
 
 // const formSchema = z.object({
-//   email: z.string().email({ message: "Invalid email format." }),
+//   email: z.string().email({
+//     message: "Please enter a valid email address.",
+//   }),
 //   password: z.string().min(6, {
 //     message: "Password must be at least 6 characters.",
 //   }),
@@ -44,15 +43,11 @@
 //         password: values.password,
 //       })
 
-//       // Extract token from response
-//       const token = response.token.replace("Bearer ", "")
-
-//       // Set auth state (we now include email in the user object)
-//       login(token, {
-//         id: "user123", // Replace with real user id from API if available
-//         username: "", // If needed, fetch username separately or from the token
-//         email: values.email,
-//         roles: ["USER"],
+//       // Set auth state
+//       login(response.token, {
+//         id: response.id,
+//         username: response.username,
+//         email: response.email,
 //       })
 
 //       toast({
@@ -111,125 +106,27 @@
 //   )
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"use client"
-
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { authApi } from "@/lib/api/auth-api"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { useAuth } from "@/lib/context/auth-context"
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { authApi } from "@/lib/api/auth-api";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { useAuth } from "@/lib/context/auth-context";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -238,12 +135,12 @@ const formSchema = z.object({
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
-})
+});
 
 export default function LoginForm() {
-  const router = useRouter()
-  const { login } = useAuth()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -251,40 +148,40 @@ export default function LoginForm() {
       email: "",
       password: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       const response = await authApi.login({
         email: values.email,
         password: values.password,
-      })
+      });
 
       // Set auth state
       login(response.token, {
         id: response.id,
         username: response.username,
         email: response.email,
-      })
+      });
 
       toast({
         title: "Login successful",
         description: "You have been logged in successfully.",
-      })
+      });
 
       // Redirect to home page
-      router.push("/")
+      router.push("/");
     } catch (error) {
-      console.error("Login failed:", error)
+      console.error("Login failed:", error);
       toast({
         title: "Login failed",
         description: "Please check your credentials and try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -311,17 +208,27 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Enter your password" {...field} />
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Logging in..." : "Login"}
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Logging in...
+            </>
+          ) : (
+            "Login"
+          )}
         </Button>
       </form>
     </Form>
-  )
+  );
 }
-
