@@ -125,29 +125,4 @@ export const getSampleMedicineById = (id: string): Medicine => {
   return sampleMedicines.find((med) => med.id === id) || sampleMedicines[0]
 }
 
-export const getSampleOrders = (): Order[] => {
-  return [
-    {
-      id: "order1",
-      userId: "user123",
-      medicineId: "sample1",
-      quantity: 2,
-      orderDate: new Date(Date.now() - 86400000 * 2).toISOString(), // 2 days ago
-    },
-    {
-      id: "order2",
-      userId: "user123",
-      medicineId: "sample2",
-      quantity: 1,
-      orderDate: new Date(Date.now() - 86400000 * 5).toISOString(), // 5 days ago
-    },
-    {
-      id: "order3",
-      userId: "user123",
-      medicineId: "sample3",
-      quantity: 3,
-      orderDate: new Date(Date.now() - 86400000 * 10).toISOString(), // 10 days ago
-    },
-  ]
-}
-
+ 
