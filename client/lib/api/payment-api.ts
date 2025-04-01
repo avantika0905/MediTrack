@@ -1,9 +1,10 @@
  
 
-
 // import { toast } from "@/components/ui/use-toast"
 
-// const API_BASE_URL = "http://localhost:8080"
+// // const API_BASE_URL = "http://localhost:8080"
+
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // export interface CreateOrderRequest {
 //   orderId: string
@@ -175,47 +176,14 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { toast } from "@/components/ui/use-toast"
 
-// const API_BASE_URL = "http://localhost:8080"
+// Use environment variable with fallback
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// Use environment variable with fallback
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"
+
+ 
 
 export interface CreateOrderRequest {
   orderId: string
@@ -268,32 +236,43 @@ const handleApiError = (error: any) => {
   throw error
 }
 
+// Helper function to get auth token
+const getAuthToken = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("token") || ""
+  }
+  return ""
+}
+
 // Payment API
 export const paymentApi = {
   createOrder: async (data: CreateOrderRequest): Promise<CreateOrderResponse> => {
     try {
       console.log("Creating payment order with data:", data)
 
+      const token = getAuthToken()
+      if (!token) {
+        throw new Error("Authentication token not found. Please log in again.")
+      }
+
       const response = await fetch(`${API_BASE_URL}/api/payments/create-order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
-        credentials: "include", // Include cookies
       })
 
       if (!response.ok) {
-        const errorText = await response.text()
         let errorMessage = "Failed to create payment order"
 
         try {
-          const errorData = JSON.parse(errorText)
+          const errorData = await response.json()
           errorMessage = errorData.message || errorMessage
         } catch (e) {
-          // If parsing fails, use the raw text
-          errorMessage = errorText || errorMessage
+          // If parsing fails, use status text
+          errorMessage = response.statusText || errorMessage
         }
 
         console.error("Failed to create payment order:", errorMessage)
@@ -312,26 +291,29 @@ export const paymentApi = {
     try {
       console.log("Verifying payment with data:", data)
 
+      const token = getAuthToken()
+      if (!token) {
+        throw new Error("Authentication token not found. Please log in again.")
+      }
+
       const response = await fetch(`${API_BASE_URL}/api/payments/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
-        credentials: "include", // Include cookies
       })
 
       if (!response.ok) {
-        const errorText = await response.text()
         let errorMessage = "Failed to verify payment"
 
         try {
-          const errorData = JSON.parse(errorText)
+          const errorData = await response.json()
           errorMessage = errorData.message || errorMessage
         } catch (e) {
-          // If parsing fails, use the raw text
-          errorMessage = errorText || errorMessage
+          // If parsing fails, use status text
+          errorMessage = response.statusText || errorMessage
         }
 
         console.error("Failed to verify payment:", errorMessage)
@@ -350,23 +332,26 @@ export const paymentApi = {
     try {
       console.log("Fetching payment details for order:", orderId)
 
+      const token = getAuthToken()
+      if (!token) {
+        throw new Error("Authentication token not found. Please log in again.")
+      }
+
       const response = await fetch(`${API_BASE_URL}/api/payments/order/${orderId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
-        credentials: "include", // Include cookies
       })
 
       if (!response.ok) {
-        const errorText = await response.text()
         let errorMessage = "Failed to fetch payment details"
 
         try {
-          const errorData = JSON.parse(errorText)
+          const errorData = await response.json()
           errorMessage = errorData.message || errorMessage
         } catch (e) {
-          // If parsing fails, use the raw text
-          errorMessage = errorText || errorMessage
+          // If parsing fails, use status text
+          errorMessage = response.statusText || errorMessage
         }
 
         console.error("Failed to fetch payment details:", errorMessage)
@@ -381,5 +366,4 @@ export const paymentApi = {
     }
   },
 }
-
 

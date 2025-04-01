@@ -1,8 +1,9 @@
 import { toast } from "@/components/ui/use-toast"
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-console.log(API_BASE_URL); // http://localhost:8080
 
+// Use environment variable with fallback
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"
+ 
 
 export interface Medicine {
   id: string

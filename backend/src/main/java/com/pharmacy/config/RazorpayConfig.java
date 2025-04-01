@@ -12,7 +12,7 @@ public class RazorpayConfig {
     @Value("${RAZORPAY_KEY_ID}")
     private String keyId;
 
-    @Value("${razorpay.key.secret}")
+    @Value("${RAZORPAY_KEY_SECRET}")
     private String keySecret;
 
     @Bean
