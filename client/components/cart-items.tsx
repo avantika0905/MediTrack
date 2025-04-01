@@ -157,7 +157,7 @@
 //         key: orderResponse.key,
 //         amount: orderResponse.amount * 100, // Amount in paise
 //         currency: orderResponse.currency,
-//         name: "MediMart",
+//         name: "MediTrack",
 //         description: "Medicine Purchase",
 //         order_id: orderResponse.razorpayOrderId,
 //         prefill: {
@@ -717,7 +717,7 @@ export default function CartItems() {
         key: orderResponse.key,
         amount: orderResponse.amount * 100, // Amount in paise
         currency: orderResponse.currency,
-        name: "MediMart",
+        name: "MediTrack",
         description: "Medicine Purchase",
         order_id: orderResponse.razorpayOrderId,
         prefill: {

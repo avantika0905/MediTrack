@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import CartItems from "@/components/cart-items"
 
 export const metadata: Metadata = {
-  title: "Cart | MediMart",
+  title: "Cart | MediTrack",
   description: "View and manage your shopping cart",
 }
 

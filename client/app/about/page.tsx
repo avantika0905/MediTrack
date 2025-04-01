@@ -3,26 +3,26 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ShieldCheck, Truck, Clock, HeartPulse } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "About Us | MediMart",
-  description: "Learn more about MediMart and our mission",
+  title: "About Us | MediTrack",
+  description: "Learn more about MediTrack and our mission",
 }
 
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">About MediMart</h1>
+        <h1 className="text-3xl font-bold mb-6">About MediTrack</h1>
 
         <div className="space-y-8">
           <Card>
             <CardContent className="p-6">
               <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
               <p className="text-muted-foreground mb-4">
-                At MediMart, our mission is to make healthcare accessible to everyone. We believe that everyone deserves
+                At MediTrack, our mission is to make healthcare accessible to everyone. We believe that everyone deserves
                 access to quality medicines at affordable prices, delivered right to their doorstep.
               </p>
               <p className="text-muted-foreground">
-                Founded in 2023, MediMart has quickly grown to become one of the leading online pharmacies, serving
+                Founded in 2023, MediTrack has quickly grown to become one of the leading online pharmacies, serving
                 thousands of customers across the country.
               </p>
             </CardContent>
@@ -94,7 +94,7 @@ export default function AboutPage() {
             <CardContent className="p-6">
               <h2 className="text-2xl font-bold mb-4">Our Team</h2>
               <p className="text-muted-foreground mb-4">
-                MediMart is powered by a team of dedicated professionals, including pharmacists, logistics experts, and
+                MediTrack is powered by a team of dedicated professionals, including pharmacists, logistics experts, and
                 customer support specialists, all working together to provide you with the best service possible.
               </p>
               <p className="text-muted-foreground">

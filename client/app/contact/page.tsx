@@ -4,8 +4,8 @@ import { Mail, Phone, MapPin } from "lucide-react"
 import ContactForm from "@/components/contact-form"
 
 export const metadata: Metadata = {
-  title: "Contact Us | MediMart",
-  description: "Get in touch with MediMart for any queries or feedback",
+  title: "Contact Us | MediTrack",
+  description: "Get in touch with MediTrack for any queries or feedback",
 }
 
 export default function ContactPage() {
@@ -26,7 +26,7 @@ export default function ContactPage() {
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-primary" />
-                  <span>support@medimart.com</span>
+                  <span>support@MediTrack.com</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-primary" />

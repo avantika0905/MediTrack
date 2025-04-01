@@ -3,8 +3,8 @@ import MedicineManagementForm from "@/components/medicine-management-form";
 import UserMedicines from "@/components/user-medicines";
 
 export const metadata: Metadata = {
-  title: "Medicine Management | MediMart",
-  description: "Manage your medicines in MediMart",
+  title: "Medicine Management | MediTrack",
+  description: "Manage your medicines in MediTrack",
 };
 
 export default function MedicineManagementPage() {

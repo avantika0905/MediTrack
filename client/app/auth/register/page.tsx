@@ -3,8 +3,8 @@ import Link from "next/link"
 import RegisterForm from "@/components/register-form"
 
 export const metadata: Metadata = {
-  title: "Register | MediMart",
-  description: "Create a new MediMart account",
+  title: "Register | MediTrack",
+  description: "Create a new MediTrack account",
 }
 
 export default function RegisterPage() {

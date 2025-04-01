@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import MedicineEditForm from "@/components/medicine-edit-form"
 
 export const metadata: Metadata = {
-  title: "Edit Medicine | MediMart",
-  description: "Edit medicine details in MediMart",
+  title: "Edit Medicine | MediTrack",
+  description: "Edit medicine details in MediTrack",
 }
 
 export default function MedicineEditPage({ params }: { params: { id: string } }) {

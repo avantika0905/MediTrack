@@ -3,8 +3,8 @@ import ProfileInfo from "@/components/profile-info"
 import OrderHistory from "@/components/order-history"
 
 export const metadata: Metadata = {
-  title: "Profile | MediMart",
-  description: "View and manage your MediMart profile",
+  title: "Profile | MediTrack",
+  description: "View and manage your MediTrack profile",
 }
 
 export default function ProfilePage() {

@@ -3,8 +3,8 @@ import Link from "next/link"
 import LoginForm from "@/components/login-form"
 
 export const metadata: Metadata = {
-  title: "Login | MediMart",
-  description: "Login to your MediMart account",
+  title: "Login | MediTrack",
+  description: "Login to your MediTrack account",
 }
 
 export default function LoginPage() {

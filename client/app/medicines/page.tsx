@@ -3,7 +3,7 @@ import MedicinesList from "@/components/medicines-list"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export const metadata = {
-  title: "Medicines | MediMart",
+  title: "Medicines | MediTrack",
   description: "Browse our wide range of medicines and health products",
 }
 
