@@ -25,15 +25,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    @Value("${jwt.secret}")
+    @Value("${JWT_SECRET}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration}")
+    @Value("${JWT_EXPIRATION}")
     private long jwtExpirationMs;
 
-    public AuthService(UserRepository userRepository, 
-                       PasswordEncoder passwordEncoder, 
-                       AuthenticationManager authenticationManager) {
+    public AuthService(UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -61,11 +61,10 @@ public class AuthService {
 
     public AuthDto.AuthResponse login(AuthDto.LoginRequest request, HttpServletResponse response) {
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         String token = generateJwtToken(user);
         setTokenAsCookie(response, token);
@@ -77,11 +76,11 @@ public class AuthService {
         Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
-            .setSubject(user.getEmail())
-            .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact();
+                .setSubject(user.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 
     private void setTokenAsCookie(HttpServletResponse response, String token) {
