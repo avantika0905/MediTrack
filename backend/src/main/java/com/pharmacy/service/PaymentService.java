@@ -528,10 +528,10 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
 
-    @Value("${razorpay.key.id}")
+    @Value("${RAZORPAY_KEY_ID}")
     private String razorpayKeyId;
     
-    @Value("${razorpay.key.secret}")
+    @Value("${RAZORPAY_KEY_SECRET}")
     private String razorpayKeySecret;
 
     public PaymentService(RazorpayClient razorpayClient, 
