@@ -63,6 +63,7 @@ export default function UserMedicines() {
   const handleDelete = async (id: string) => {
     try {
       await medicinesApi.delete(id);
+      router.push("/profile");
       setMedicines(medicines.filter((medicine) => medicine.id !== id));
       toast({
         title: "Medicine deleted",
