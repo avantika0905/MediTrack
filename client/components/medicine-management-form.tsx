@@ -337,7 +337,7 @@ export default function MedicineManagementForm() {
       })
 
       form.reset()
-      router.refresh() 
+      // router.refresh() 
       router.push("/medicines")
     } catch (error) {
       console.error("Failed to add medicine:", error)
